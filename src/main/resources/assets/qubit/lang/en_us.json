@@ -1,0 +1,14 @@
+{
+  "qubit.restarter.warn.hours": "%s Hours Until Restart!",
+  "qubit.restarter.warn.minutes": "%s Minutes Until Restart!",
+  "qubit.restarter.warn.seconds": "Restarting in %ss!",
+  "qubit.restarter.warn.restart": "Restarting!",
+
+  "qubit.configuration.title": "Qubit Configs",
+  "qubit.configuration.section.qubit.common.toml": "Qubit Configs",
+  "qubit.configuration.section.qubit.common.toml.title": "Qubit Configs",
+  "qubit.configuration.items": "Item List",
+  "qubit.configuration.logDirtBlock": "Log Dirt Block",
+  "qubit.configuration.magicNumberIntroduction": "Magic Number Text",
+  "qubit.configuration.magicNumber": "Magic Number"
+}
