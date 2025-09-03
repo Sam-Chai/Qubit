@@ -54,7 +54,25 @@ public class Config {
     public static final ModConfigSpec.IntValue PLECO_MINUTE = BUILDER
             .comment("Set a minute for clean the drop items")
             .defineInRange("plecoMinutes", 0, 0, 60);
-//
+    public static final ModConfigSpec.BooleanValue IGNORE_NAMED_ITEMS = BUILDER
+            .comment("Ignore named items")
+            .define("ignoreNamedItems", true);
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> WHITELIST_ITEM_IDS = BUILDER
+            .comment("Whitelist for pleco cleaner (minecraft:dirt)")
+            .defineListAllowEmpty(
+                    List.of("whitelistItemIds"),
+                    () -> List.of(),
+                    o -> o instanceof String s && !s.isBlank()
+            );
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLIST_ITEM_IDS = BUILDER
+            .comment("Blacklist for pleco cleaner (minecraft:dirt)")
+            .defineListAllowEmpty(
+                    List.of("blacklistItemIds"),
+                    () -> List.of(),
+                    o -> o instanceof String s && !s.isBlank()
+            );
+
+
 //    public static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
 //            .comment("Whether to log the dirt block on common setup")
 //            .define("logDirtBlock", true);

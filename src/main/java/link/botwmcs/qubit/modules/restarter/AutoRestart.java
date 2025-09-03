@@ -2,6 +2,7 @@ package link.botwmcs.qubit.modules.restarter;
 
 import link.botwmcs.qubit.Config;
 import link.botwmcs.qubit.Qubit;
+import link.botwmcs.qubit.utils.restarter.Scheduler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,6 @@ public final class AutoRestart {
     // 用 nanoTime 做“锚点 + 周期”的绝对调度，避免一轮轮累加带来的漂移
     private static long anchorNanos = 0L;     // 第一次武装时刻（nanoTime）
     private static long periodNanos = 0L;     // 每轮的固定时长（H:M）
-    private static long tickCounter = 0L;
 
 
     // 下一次触发点（从 anchor + n*period 推导）
@@ -46,27 +46,7 @@ public final class AutoRestart {
     // 记录上一次的周期，只在变化时才重置触发点
     private static long currentPeriodNanos = -1L;
 
-    private static final boolean DEV_NO_STOP = false;
-
-    private record Delayed(long dueTick, Runnable task) {}
-    private static final List<Delayed> QUEUE = new ArrayList<>();
-
-    public static void runLater(int ticks, Runnable task) {
-        QUEUE.add(new Delayed(tickCounter + Math.max(1, ticks), task));
-    }
-
-    public static void tickScheduler(MinecraftServer server) {
-        tickCounter++;
-        if (QUEUE.isEmpty()) return;
-        Iterator<Delayed> it = QUEUE.iterator();
-        while (it.hasNext()) {
-            Delayed d = it.next();
-            if (d.dueTick <= tickCounter) {
-                try { d.task.run(); } catch (Throwable t) { t.printStackTrace(); }
-                it.remove();
-            }
-        }
-    }
+    private AutoRestart() {}
 
     public static void ticker(MinecraftServer server) {
         if (server == null) return;
@@ -116,9 +96,9 @@ public final class AutoRestart {
                 .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         StopBeep(server);
 
-        runLater(20, () -> {
+        Scheduler.runLater(20, () -> {
             try {
-                server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), "stop");
+                server.getCommands().performPrefixedCommand(server.createCommandSourceStack(), Config.RESTART_COMMAND.get());
             } catch (Throwable t) {
                 t.printStackTrace();
             }
@@ -222,12 +202,12 @@ public final class AutoRestart {
 
     private static void HiBeep(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            runLater(1, () -> {
+            Scheduler.runLater(1, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
             });
 
-            runLater(3, () -> {
+            Scheduler.runLater(3, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
             });
@@ -236,12 +216,12 @@ public final class AutoRestart {
 
     private static void MidBeep(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            runLater(1, () -> {
+            Scheduler.runLater(1, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
             });
 
-            runLater(3, () -> {
+            Scheduler.runLater(3, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
             });
@@ -250,12 +230,12 @@ public final class AutoRestart {
 
     private static void MidBeep1(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            runLater(1, () -> {
+            Scheduler.runLater(1, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             });
 
-            runLater(3, () -> {
+            Scheduler.runLater(3, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             });
@@ -264,12 +244,12 @@ public final class AutoRestart {
 
     private static void LowBeep(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            runLater(1, () -> {
+            Scheduler.runLater(1, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
             });
 
-            runLater(3, () -> {
+            Scheduler.runLater(3, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
             });
@@ -278,22 +258,22 @@ public final class AutoRestart {
 
     private static void StopBeep(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            runLater(1, () -> {
+            Scheduler.runLater(1, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 3.0F);
             });
 
-            runLater(4, () -> {
+            Scheduler.runLater(4, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
             });
 
-            runLater(7, () -> {
+            Scheduler.runLater(7, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
             });
 
-            runLater(10, () -> {
+            Scheduler.runLater(10, () -> {
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
                 player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1.0F, 0.0F);
             });

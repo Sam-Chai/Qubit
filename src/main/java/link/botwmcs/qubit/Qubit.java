@@ -1,6 +1,9 @@
 package link.botwmcs.qubit;
 
+import link.botwmcs.qubit.modules.pleco.CleanupItems;
 import link.botwmcs.qubit.modules.restarter.AutoRestart;
+import link.botwmcs.qubit.utils.restarter.Scheduler;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
@@ -75,12 +78,17 @@ public class Qubit {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        Scheduler.reset();
+        if (event.getServer().isDedicatedServer()) {
+            CleanupItems.bootstrap(event.getServer());
+        }
     }
 
     @SubscribeEvent
     public void onServerTicking(ServerTickEvent.Post event) {
-        AutoRestart.ticker(event.getServer());
-        AutoRestart.tickScheduler(event.getServer());
+        Scheduler.tick();
+        if (event.getServer().isDedicatedServer()) {
+            AutoRestart.ticker(event.getServer());
+        }
     }
 }

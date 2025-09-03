@@ -25,7 +25,6 @@ public class QubitClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
-        Qubit.LOGGER.info("HELLO FROM CLIENT SETUP");
-        Qubit.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
     }
 }

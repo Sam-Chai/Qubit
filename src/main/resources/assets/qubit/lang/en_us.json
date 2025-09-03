@@ -4,11 +4,23 @@
   "qubit.restarter.warn.seconds": "Restarting in %ss!",
   "qubit.restarter.warn.restart": "Restarting!",
 
+  "qubit.pleco.warn.preparing": "%s Seconds Until cleaning!",
+  "qubit.pleco.info.cleaned": "Cleaned %s items!",
+
   "qubit.configuration.title": "Qubit Configs",
   "qubit.configuration.section.qubit.common.toml": "Qubit Configs",
   "qubit.configuration.section.qubit.common.toml.title": "Qubit Configs",
-  "qubit.configuration.items": "Item List",
-  "qubit.configuration.logDirtBlock": "Log Dirt Block",
-  "qubit.configuration.magicNumberIntroduction": "Magic Number Text",
-  "qubit.configuration.magicNumber": "Magic Number"
+
+  "qubit.configuration.enableModernShowtime": "Modern showtime",
+  "qubit.configuration.enableBoidFeature": "Boids feature",
+  "qubit.configuration.included_entities": "Boids entities",
+  "qubit.configuration.enableQuarkTotem": "Quark's Totem feature",
+  "qubit.configuration.totem_world": "Quark's Totem worlds",
+  "qubit.configuration.enableAutoRestart": "Auto restart feature",
+  "qubit.configuration.restartHours": "Restart hours",
+  "qubit.configuration.restartMinutes": "Restart minutes",
+  "qubit.configuration.restartCommand": "Restart executed commands",
+  "qubit.configuration.enablePleco": "Pleco feature (Auto clean drop items)",
+  "qubit.configuration.plecoHours": "Pleco hours",
+  "qubit.configuration.plecoMinutes": "Pleco minutes"
 }
