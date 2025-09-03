@@ -22,5 +22,8 @@
   "qubit.configuration.restartCommand": "Restart executed commands",
   "qubit.configuration.enablePleco": "Pleco feature (Auto clean drop items)",
   "qubit.configuration.plecoHours": "Pleco hours",
-  "qubit.configuration.plecoMinutes": "Pleco minutes"
+  "qubit.configuration.plecoMinutes": "Pleco minutes",
+  "qubit.configuration.ignoreNamedItems": "Ignore named items",
+  "qubit.configuration.whitelistItemIds": "Pleco Whitelist",
+  "qubit.configuration.blacklistItemIds": "Pleco Blacklist"
 }

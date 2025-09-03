@@ -1,0 +1,29 @@
+{
+  "qubit.restarter.warn.hours": "还有 %s 小时重启服务器!",
+  "qubit.restarter.warn.minutes": "还有 %s 分钟重启服务器!",
+  "qubit.restarter.warn.seconds": "还有 %s 秒重启服务器!",
+  "qubit.restarter.warn.restart": "现在重启服务器!",
+
+  "qubit.pleco.warn.preparing": "还有 %s 秒清理掉落物!",
+  "qubit.pleco.info.cleaned": "已清理 %s 个掉落物!",
+
+  "qubit.configuration.title": "Qubit 配置文件",
+  "qubit.configuration.section.qubit.common.toml": "Qubit Configs",
+  "qubit.configuration.section.qubit.common.toml.title": "Qubit Configs",
+
+  "qubit.configuration.enableModernShowtime": "启用现代化包装",
+  "qubit.configuration.enableBoidFeature": "鱼群特性",
+  "qubit.configuration.included_entities": "适用于鱼群特性的实体",
+  "qubit.configuration.enableQuarkTotem": "夸克死亡图腾特性",
+  "qubit.configuration.totem_world": "适用于死亡图腾的世界",
+  "qubit.configuration.enableAutoRestart": "自动重启特性",
+  "qubit.configuration.restartHours": "自动重启计时器（时）",
+  "qubit.configuration.restartMinutes": "自动重启计时器（分）",
+  "qubit.configuration.restartCommand": "自动重启执行的命令",
+  "qubit.configuration.enablePleco": "清道夫特性 (自动清理掉落物)",
+  "qubit.configuration.plecoHours": "清道夫计时器（时）",
+  "qubit.configuration.plecoMinutes": "清道夫计时器（分）",
+  "qubit.configuration.ignoreNamedItems": "是否忽略已命名的物品",
+  "qubit.configuration.whitelistItemIds": "清道夫物品白名单",
+  "qubit.configuration.blacklistItemIds": "清道夫物品黑名单"
+}
