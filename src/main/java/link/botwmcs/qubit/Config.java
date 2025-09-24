@@ -32,6 +32,15 @@ public class Config {
                     () -> List.of(),
                     o -> o instanceof String s && !s.isBlank()
             );
+    public static final ModConfigSpec.BooleanValue ECOHELPER = BUILDER
+            .comment("Enable Economy feature")
+            .define("enableEcoHelper", true);
+    public static final ModConfigSpec.ConfigValue<String> DEFAULT_TYPE = BUILDER
+            .comment("What the type is player used in default way")
+            .define("defaultType", "default");
+    public static final ModConfigSpec.ConfigValue<Integer> BASIC_BAL = BUILDER
+            .comment("Basic balance in default type")
+            .define("basicBalance", 0);
 
     public static final ModConfigSpec.BooleanValue AUTO_RESTART = BUILDER
             .comment("Enable a classical auto restart feature")
@@ -45,6 +54,9 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<String> RESTART_COMMAND = BUILDER
             .comment("What command execute when restart ('/' is no needed)")
             .define("restartCommand", "stop");
+    public static final ModConfigSpec.BooleanValue FLEA = BUILDER
+            .comment("Enable flea market")
+            .define("enableFleaMarket", true);
     public static final ModConfigSpec.BooleanValue PLECO = BUILDER
             .comment("Enable pleco feature")
             .define("enablePleco", true);
@@ -71,24 +83,10 @@ public class Config {
                     () -> List.of(),
                     o -> o instanceof String s && !s.isBlank()
             );
-
-
-//    public static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-//            .comment("Whether to log the dirt block on common setup")
-//            .define("logDirtBlock", true);
-//
-//    public static final ModConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-//            .comment("A magic number")
-//            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
-//
-//    public static final ModConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-//            .comment("What you want the introduction message to be for the magic number")
-//            .define("magicNumberIntroduction", "The magic number is... ");
-//
-//    // a list of strings that are treated as resource locations for items
-//    public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-//            .comment("A list of items to log on common setup.")
-//            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), () -> "", Config::validateItemName);
+    public static final ModConfigSpec.BooleanValue WASTE_ON_FLEA = BUILDER
+            .comment("Waste items will drop in flea market")
+            .comment("This feature need flea market feature and ecohelper feature")
+            .define("wasteOnFlea", true);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 

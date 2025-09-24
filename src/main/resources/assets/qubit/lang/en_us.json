@@ -6,6 +6,17 @@
 
   "qubit.pleco.warn.preparing": "%s Seconds Until cleaning!",
   "qubit.pleco.info.cleaned": "Cleaned %s items!",
+  "qubit.pleco.info.collected": "Collected $s items to flea market!",
+
+  "qubit.flea.title": "Flea Market",
+  "qubit.flea.price": "Price：%s",
+  "qubit.flea.hint.click_to_buy": "Click to buy",
+  "qubit.flea.no_money": "You don't have enough money",
+  "qubit.flea.no_space": "Your inventory has no space!",
+  "qubit.flea.sold": "Oops! somebody bought first",
+  "qubit.flea.buy_ok": "You bought %s ×%s，cost %s.",
+  "qubit.flea.next_page": "Next Page",
+  "qubit.flea.prev_page": "Previous Page",
 
   "qubit.configuration.title": "Qubit Configs",
   "qubit.configuration.section.qubit.common.toml": "Qubit Configs",
@@ -16,6 +27,9 @@
   "qubit.configuration.included_entities": "Boids entities",
   "qubit.configuration.enableQuarkTotem": "Quark's Totem feature",
   "qubit.configuration.totem_world": "Quark's Totem worlds",
+  "qubit.configuration.basicBalance": "Gives money when player first join-in",
+  "qubit.configuration.defaultType": "Default money type",
+  "qubit.configuration.enableEcoHelper": "Enable EcoHelper",
   "qubit.configuration.enableAutoRestart": "Auto restart feature",
   "qubit.configuration.restartHours": "Restart hours",
   "qubit.configuration.restartMinutes": "Restart minutes",

@@ -1,6 +1,7 @@
 package link.botwmcs.qubit.modules.pleco;
 
 import link.botwmcs.qubit.Config;
+import link.botwmcs.qubit.modules.flea.FleaMarketManager;
 import link.botwmcs.qubit.utils.restarter.Scheduler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -14,19 +15,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-@OnlyIn(Dist.DEDICATED_SERVER)
 public final class CleanupItems {
     private CleanupItems() {}
 
-    private static final List<Integer> WARN_SECONDS = List.of(600, 300, 60, 30, 10, 5);
+    private static final List<Integer> WARN_SECONDS = List.of(60, 30, 10, 5);
     private static MinecraftServer SERVER;
 
     public static void bootstrap(MinecraftServer server) {
@@ -56,18 +54,70 @@ public final class CleanupItems {
 
         // 真正清理
         Scheduler.runLater((int) periodTicks, () -> {
-            int removed = cleanupAll();
-            broadcast(Component.translatable("qubit.pleco.info.cleaned", removed).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
-            scheduleNextRound();
+            if (Config.WASTE_ON_FLEA.get()) {
+                int collected = collectAllToFleaMarket();
+                broadcast(Component.translatable("qubit.pleco.info.collected", collected).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+                scheduleNextRound();
+
+            } else {
+                int removed = cleanupAll();
+                broadcast(Component.translatable("qubit.pleco.info.cleaned", removed).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+                scheduleNextRound();
+            }
         });
     }
 
     public static int runNowAndReschedule() {
         if (SERVER == null) return 0;
-        int removed = cleanupAll();
-        broadcast(Component.translatable("qubit.pleco.info.cleaned", removed).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
-        scheduleNextRound();
-        return removed;
+        if (Config.WASTE_ON_FLEA.get()) {
+            int collected = collectAllToFleaMarket();
+            broadcast(Component.translatable("qubit.pleco.info.collected", collected).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+            scheduleNextRound();
+            return collected;
+        } else {
+            int removed = cleanupAll();
+            broadcast(Component.translatable("qubit.pleco.info.cleaned", removed).withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD));
+            scheduleNextRound();
+            return removed;
+        }
+    }
+
+    private static int collectAllToFleaMarket() {
+        final boolean ignoreNamed = Config.IGNORE_NAMED_ITEMS.get();
+        Set<ResourceLocation> whitelist = parseIdList(Config.WHITELIST_ITEM_IDS.get());
+        Set<ResourceLocation> blacklist = parseIdList(Config.BLACKLIST_ITEM_IDS.get());
+
+        Predicate<? super ItemEntity> filter = ie -> {
+            if (!ie.isAlive()) return false;
+            ItemStack stack = ie.getItem();
+            if (stack.isEmpty()) return false;
+
+            Item item = stack.getItem();
+            ResourceLocation id = item.builtInRegistryHolder().key().location();
+
+            if (!whitelist.isEmpty() && !whitelist.contains(id)) return false;
+            if (blacklist.contains(id)) return false;
+            if (ignoreNamed && stack.has(DataComponents.CUSTOM_NAME)) return false;
+
+            return true;
+        };
+
+        int collected = 0;
+        for (ServerLevel level : SERVER.getAllLevels()) {
+            List<? extends ItemEntity> items = level.getEntities(
+                    net.minecraft.world.level.entity.EntityTypeTest.forClass(ItemEntity.class),
+                    filter
+            );
+            for (ItemEntity ie : items) {
+                ItemStack stack = ie.getItem().copy();
+                if (!stack.isEmpty()) {
+                    FleaMarketManager.get().ingestDrop(stack, level, ie.blockPosition());
+                    ie.discard();
+                    collected++;
+                }
+            }
+        }
+        return collected;
     }
 
     // === 实际清理逻辑 ===

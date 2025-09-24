@@ -7,6 +7,14 @@
   "qubit.pleco.warn.preparing": "还有 %s 秒清理掉落物!",
   "qubit.pleco.info.cleaned": "已清理 %s 个掉落物!",
 
+  "qubit.flea.title": "跳蚤市场",
+  "qubit.flea.price": "价格：%s",
+  "qubit.flea.hint.click_to_buy": "点击购买",
+  "qubit.flea.no_money": "余额不足，购买失败。",
+  "qubit.flea.no_space": "背包没有足够空间。",
+  "qubit.flea.sold": "手慢了！该物品已被他人买走。",
+  "qubit.flea.buy_ok": "已购买 %s ×%s，花费 %s。",
+
   "qubit.configuration.title": "Qubit 配置文件",
   "qubit.configuration.section.qubit.common.toml": "Qubit Configs",
   "qubit.configuration.section.qubit.common.toml.title": "Qubit Configs",
